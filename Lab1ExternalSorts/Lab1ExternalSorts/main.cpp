@@ -12,7 +12,7 @@ using std::cout;
 using std::string;
 
 void StraightMerge(const std::string& inputFileName);
-
+int MergeFiles(FILE& B, FILE& C, FILE& A);
 void SplitFiles(const std::string& inputFileName, const std::string& outputFile1, const std::string& outputFile2);
 bool CreateFileWithRandomNumbers(const std::string& fileName, const int numbersCount, const int maxNumberValue);
 bool MergeFiles(const std::string& inputFile1, const std::string& inputFile2, const std::string& outputFile1, const std::string& outputFile2);
@@ -26,11 +26,11 @@ bool isFileContainsSortedArray(const string& fileName)
 
     if (!file.is_open())
     {
-        cout << "-" << endl;
+        cout << "File close" << endl;
     }
     else
     {
-        cout << "+!" << endl;
+        cout << "File open!" << endl;
     }
 
     int antecedentNumber = -1;
@@ -51,7 +51,7 @@ bool isFileContainsSortedArray(const string& fileName)
 }
 
 void StraightMerge(const string& inputFileName) {
-    string fileNames[4] = {"F1.txt", "F2.txt", "F3.txt", "F4.txt" };
+    string fileNames[4] = {"/Users/vladashudegova/files/F1.txt", "/Users/vladashudegova/files/F2.txt", "/Users/vladashudegova/files/F3.txt", "/Users/vladashudegova/files/F4.txt" };
 
 
     SplitFiles(inputFileName, fileNames[0], fileNames[1]);
@@ -227,15 +227,15 @@ int CreateAndSortFile(const string& fileName, const int numbersCount, const int 
 }
 
 int main() {
-
-    string fileName = "labFileSort.txt";
-    const int numbersCount = 600;
+    
+    string fileName = "/Users/vladashudegova/files/labFileSort.txt";
+    const int numbersCount = 100;
     const int maxNumberValue = 1000000;
 
 
     CreateAndSortFile(fileName, numbersCount, maxNumberValue);
 
     cout << endl;
-
+    
     return 0;
 }
