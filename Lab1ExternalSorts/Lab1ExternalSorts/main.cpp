@@ -2,6 +2,7 @@
 #include <fstream>
 #include <istream>
 #include <string>
+#include <vector>
 #include <random>
 
 using std::ifstream;
@@ -11,8 +12,9 @@ using std::cin;
 using std::cerr;
 using std::cout;
 using std::string;
+using std::vector;
 
-
+const string path = "/Users/vladashudegova/dev/repos/ExternalSorts/ExternalSorts/files/";
 
 bool isFileContainsSortedArray(const string& fileName)
 {
@@ -100,7 +102,7 @@ bool mergeFiles(const string& inputFile1, const string& inputFile2, const string
 
     if (!(inputFiles[1] >> antecedentEl[1]))
     {
-        return 1;
+        return true;
     }
 
     while (!inputFiles[0].eof() || !inputFiles[1].eof())
@@ -119,6 +121,7 @@ bool mergeFiles(const string& inputFile1, const string& inputFile2, const string
             {
                 m = 1 - m;
             }
+            
             if (antecedentEl[m] > currentEl[m]) {
                 outputFiles[n] << antecedentEl[m] << endl;
                 inputFiles[m] >> currentEl[m];
@@ -146,28 +149,61 @@ bool mergeFiles(const string& inputFile1, const string& inputFile2, const string
         outputFiles[i].close();
     }
 
-    return 0;
+    return false;
 }
 
-void straightMerge(const string& inputFileName) {
-    string fileNames[4] = {"F1.txt", "F2.txt", "F3.txt", "F4.txt" };
-
-
-    splitFiles(inputFileName, fileNames[0], fileNames[1]);
-
-    while (!mergeFiles(fileNames[0], fileNames[1], fileNames[2], fileNames[3]))
+bool isEmpty(const string& fileName){
+    ifstream inputfile;
+    inputfile.open(fileName);
+    if (!inputfile.is_open())
     {
-        string tmp;
-
-        for (int i = 0; i < 2; i++)
-        {
-            tmp = fileNames[i + 2];
-            fileNames[i + 2] = fileNames[i];
-            fileNames[i] = tmp;
-        }
+        cerr << "Can't open file \"" << fileName << "\"!" << endl;
     }
+    int value;
+    if(inputfile >> value){
+        inputfile.close();
+        return false;
+    }
+    else{
+        inputfile.close();
+        return true;
+    }
+    
+}
 
+string sortedArray(const vector<string> &fileNames){
+    for(int i = 0; i < fileNames.size(); i++){
+        if(isEmpty(fileNames[i])){
+            i++;
+        }else{
+            return fileNames[i];
+        }
+        //isEmpty(fileNames[i]) ? i++ : return fileNames[i];
+        
+        
+    }
+    return "errorFile";
+}
 
+string straightMerge(const string& inputFileName) {
+    vector<string> FileNames = { path+"labF1.txt", path+"labF2.txt", path+"labF3.txt", path+"labF4.txt" };
+
+  
+        splitFiles(inputFileName, FileNames[0], FileNames[1]);
+
+        while (!mergeFiles(FileNames[0], FileNames[1], FileNames[2], FileNames[3]))
+        {
+            string tmp;
+
+            for (int i = 0; i < 2; i++)
+            {
+                tmp = FileNames[i + 2];
+                FileNames[i + 2] = FileNames[i];
+                FileNames[i] = tmp;
+            }
+        }
+    return sortedArray(FileNames);
+   
 }
 
 bool createFileWithRandomNumbers(const string& fileName, const int numbersCount, const int maxNumberValue)
@@ -202,9 +238,10 @@ int createAndSortFile(const string& fileName, const int numbersCount, const int 
         return -1;
     }
 
-    straightMerge(fileName);
+    string checkSort = straightMerge(fileName);
 
-    if (!isFileContainsSortedArray(fileName))
+    cout<<checkSort<<endl;
+    if (!isFileContainsSortedArray(checkSort))
     {
         return -2;
     }
@@ -214,7 +251,7 @@ int createAndSortFile(const string& fileName, const int numbersCount, const int 
 
 int main() {
     
-    string fileName = "/Users/vladashudegova/files/fileSort.txt";
+    string fileName = path+"fileSort.txt";
 //    string fileName = "/Users/vladashudegova/dev/repos/ExternalSorts/ExternalSorts/files/file.txt";
        const int numbersCount = 100;
        const int maxNumberValue = 100000;
